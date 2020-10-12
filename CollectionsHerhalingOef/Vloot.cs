@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CollectionsHerhalingOef
 {
-    class Vloot
+    public class Vloot
     {
         public string Naam { get; set; }
         public HashSet<Schip> Schepen { get; }

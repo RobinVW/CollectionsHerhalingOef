@@ -6,7 +6,7 @@ using System.Text;
 
 namespace CollectionsHerhalingOef
 {
-    class Rederij
+    public class Rederij
     {
 
         public SortedSet<Vloot> Vloten { get; set; }

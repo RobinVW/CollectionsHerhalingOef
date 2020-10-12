@@ -1,11 +1,10 @@
-﻿Susing System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CollectionsHerhalingOef
+﻿namespace CollectionsHerhalingOef
 {
     class Sleepboot : Schip
     {
+        public Sleepboot(int lengte,int breedte, int tonnage, string naam):base(lengte,breedte,tonnage,naam)
+        {
 
+        }
     }
 }

@@ -9,7 +9,7 @@ namespace CollectionsHerhalingOef
         public int AantalPassagiers { get; set; }
         public Haven[] Traject { get; set; }
 
-        public Veerboot(int aantalPassagiers, Haven[] traject)
+        public Veerboot(int lengte,int breedte,int tonnage, string naam,int aantalPassagiers, Haven[] traject): base(lengte,breedte,tonnage,naam)
         {
             AantalPassagiers = aantalPassagiers;
             Traject = new Haven[2];
