@@ -10,7 +10,7 @@ namespace CollectionsHerhalingOef
         public int Volume { get; set; }
         public string Lading { get; set; }
 
-        public Olietanker(int lengte,int breedte,int tonnage, string naam, double cargowaarde, int volume, string lading) : base(lengte,breedte,tonnage,naam)
+        public Olietanker(int lengte,int breedte,int tonnage, string naam, double cargowaarde, int volume, string lading) : base(lengte,breedte,tonnage,naam,SchipType.Olietanker)
         {
             Cargowaarde = cargowaarde;
             Volume = volume;

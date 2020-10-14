@@ -11,7 +11,7 @@ namespace CollectionsHerhalingOef
         public int AantalTrucks { get; set; }
         public double Cargowaarde { get; set; }
 
-        public RoRoschip(int lengte,int breedte, int tonnage, string naam,int aantalAutos, int aantalTrucks, double cargowaarde) : base(lengte,breedte,tonnage,naam)
+        public RoRoschip(int lengte,int breedte, int tonnage, string naam,int aantalAutos, int aantalTrucks, double cargowaarde) : base(lengte,breedte,tonnage,naam,SchipType.RoRoschip)
         {
             AantalAutos = aantalAutos;
             AantalTrucks = aantalTrucks;

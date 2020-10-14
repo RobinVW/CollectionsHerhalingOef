@@ -47,12 +47,8 @@ namespace CollectionsHerhalingOef
             {
                 foreach (Schip schip in vloot.Schepen)
                 {
-                    if (schip.Cargowaarde = null)
-                    {
-                        TotaleCargoSchepen += 0;
-                    }
-                    else
-                    {
+
+                    { 
                         TotaleCargoSchepen += schip.Cargowaarde;
                     }
                 }
