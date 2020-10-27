@@ -4,17 +4,11 @@ using System.Text;
 
 namespace CollectionsHerhalingOef
 {
-    public class Olietanker : Schip
+    public class Olietanker : Tanker
     {
-        public double Cargowaarde { get; set; }
-        public int Volume { get; set; }
-        public string Lading { get; set; }
-
-        public Olietanker(int lengte,int breedte,int tonnage, string naam, double cargowaarde, int volume, string lading) : base(lengte,breedte,tonnage,naam,SchipType.Olietanker)
+        public Olietanker(int lengte,int breedte,int tonnage, string naam, int cargowaarde, int volume, string lading) : base(lengte,breedte,tonnage,naam, cargowaarde, volume, lading)
         {
-            Cargowaarde = cargowaarde;
-            Volume = volume;
-            Lading = lading;
+            
         }
     }
 }

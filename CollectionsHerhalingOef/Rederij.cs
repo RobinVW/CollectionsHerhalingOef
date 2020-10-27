@@ -47,7 +47,9 @@ namespace CollectionsHerhalingOef
             {
                 foreach (Schip schip in vloot.Schepen)
                 {
-
+                    var type = schip.Type;
+                    var schipMetType = schip as type;
+                    if ( (type)schip)
                     { 
                         TotaleCargoSchepen += schip.Cargowaarde;
                     }
