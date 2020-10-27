@@ -16,6 +16,7 @@ namespace CollectionsHerhalingOef
         {
             Vloten = new SortedSet<Vloot>(new VlootComparer());
             Vloten = vloten;
+            TotaleCargoSchepen = 0;
         }
 
         public void voegVlootToe(Vloot vloot)
@@ -51,7 +52,7 @@ namespace CollectionsHerhalingOef
                     var schipMetType = schip as type;
                     if ( (type)schip)
                     { 
-                        TotaleCargoSchepen += schip.Cargowaarde;
+                        ///TotaleCargoSchepen += schip.Cargowaarde;
                     }
                 }
             }
