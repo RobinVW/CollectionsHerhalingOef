@@ -21,5 +21,10 @@ namespace CollectionsHerhalingOef
             Tonnage = tonnage;
             Naam = naam;
         }
+
+        public override string ToString()
+        {
+            return $"(Schip {Naam},{Lengte},{Breedte},{Tonnage},{Vloot.Naam},{this.GetType()})";
+        }
     }
 }

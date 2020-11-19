@@ -9,140 +9,105 @@ namespace CollectionsHerhalingOef
     public class Rederij
     {
 
-        public SortedSet<Vloot> Vloten { get; set; }
-        public double TotaleCargoSchepen { get; set; }
+        private Dictionary<string, Vloot> Vloten = new Dictionary<string, Vloot>();
+        private SortedSet<Haven> Havens = new SortedSet<Haven>();
 
-        public Rederij(SortedSet<Vloot> vloten)
+        public Rederij()
         {
-            Vloten = new SortedSet<Vloot>(new VlootComparer());
-            Vloten = vloten;
-            TotaleCargoSchepen = 0;
+
         }
 
         public void voegVlootToe(Vloot vloot)
         {
-            Vloten.Add(vloot);
+            if (!Vloten.ContainsKey(vloot.Naam))
+            {
+                Vloten.Add(vloot.Naam, vloot);
+            }
         }
 
         public void verwijderVloot(Vloot vloot)
         {
-            Vloten.Remove(vloot);
+            if (Vloten.ContainsKey(vloot.Naam))
+            {
+                Vloten.Remove(vloot.Naam);
+            }
         }
 
         public Vloot ZoekVlootOp(string naamVloot)
         {
-            foreach (Vloot vloot in Vloten)
+            if (Vloten.ContainsKey(naamVloot))
             {
-                if (vloot.Naam.Equals(naamVloot, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    return vloot;
-                }
+                return Vloten[naamVloot];
             }
             return null;
         }
 
-        public double berekenTotaleCargo()
+        public SortedDictionary<int,List<Vloot>> tonnagePerVloot()
         {
-
-            foreach (Vloot vloot in Vloten)
+            //je moet een list van vloten teruggeven aangezien sommige vloten eventueel dezelfde tonnage kunnen hebben
+            SortedDictionary<int, List<Vloot>> tonpervloot = new SortedDictionary<int, List<Vloot>>();
+            foreach(Vloot v in Vloten.Values)
             {
-                foreach (Schip schip in vloot.Schepen)
+                int tonnage = v.tonnage();
+                if (tonpervloot.ContainsKey(tonnage)) tonpervloot[tonnage].Add(v);
+                else
                 {
-                    var type = schip.Type;
-                    var schipMetType = schip as type;
-                    if ( (type)schip)
-                    { 
-                        ///TotaleCargoSchepen += schip.Cargowaarde;
-                    }
+                    tonpervloot.Add(tonnage, new List<Vloot>() { v });
                 }
             }
-            return TotaleCargoSchepen;
+            return tonpervloot;
         }
 
         public int berekenBeschikbareSleepboten()
         {
-            int beschikbareSleepboten = 0;
-
-            foreach (Vloot vloot in Vloten)
+            var aantal = 0;
+            foreach(Vloot v in Vloten.Values)
             {
-                Schip[] schepenArray = new Schip[vloot.Schepen.Count];
-                vloot.Schepen.CopyTo(schepenArray);
-                beschikbareSleepboten += schepenArray.ToList().Cast<Sleepboot>().Count();
+                aantal += v.berekenBeschikbareSleepboten();
             }
-
-            return beschikbareSleepboten;
+            return aantal;
         }
 
-        public Schip toonSchipInfo(String naamSchip)
-        {
-            foreach (Vloot vloot in Vloten)
-            {
-                foreach (Schip schip in vloot.Schepen)
-                {
-                    if (schip.Naam.Equals(naamSchip, StringComparison.InvariantCultureIgnoreCase))
-                        return schip;
-                }
-            }
-            return null;
-        }
+       
 
         public int berekenTotaalVolumeTankers()
         {
-            int totaalVolumeTankers = 0;
-
-            foreach (Vloot vloot in Vloten)
+            var volume = 0;
+            foreach(Vloot v in Vloten.Values)
             {
-                Schip[] schepenArray = new Schip[vloot.Schepen.Count];
-                vloot.Schepen.CopyTo(schepenArray);
-                var schepenList = schepenArray.ToList();
-                var gastankerList = schepenList.Cast<Gastanker>().ToList();
-                var olietankerList = schepenList.Cast<Olietanker>().ToList();
-
-                foreach (Gastanker tanker in gastankerList)
-                {
-                    totaalVolumeTankers += tanker.Volume;
-                }
-
-                foreach (Olietanker tanker in olietankerList)
-                {
-                    totaalVolumeTankers += tanker.Volume;
-                }
+                var tankers = v.Schepen.Values.OfType<Tanker>();
+                volume += tankers.Sum(t => t.Volume);
             }
-
-            return totaalVolumeTankers;
-
+            return volume;
         }
 
-        public List<int> berekenTonnagePerVloot()
+        public int berekenTotaleCargoWaarde()
         {
-            List<int> vlotenTonnageLijst = new List<int>();
-            foreach(Vloot vloot in Vloten)
+            var waarde = 0;
+            foreach (Vloot v in Vloten.Values)
             {
-                int vlootTonnage = 0;
-                foreach(Schip schip in vloot.Schepen)
-                {
-                    vlootTonnage += schip.Tonnage;
-                }
-                vlotenTonnageLijst.Add(vlootTonnage);
+                var vrachtSchepen = v.Schepen.Values.OfType<Vrachtschip>();
+                waarde += vrachtSchepen.Sum(t => t.Cargowaarde);
             }
-            vlotenTonnageLijst = vlotenTonnageLijst.OrderByDescending(d => d).ToList();
+            return waarde;
 
-            return vlotenTonnageLijst;
         }
 
-
-
-        internal class VlootComparer : IComparer<Vloot>
+        public void plaatsSchipInAndereVloot(string schipNaam, string vlootNaam)
         {
-            public int Compare(Vloot x, Vloot y)
+            Schip s = null;
+            foreach(Vloot v in Vloten.Values)
             {
-                int result = x.Naam.CompareTo(y.Naam);
-                return result;
+                 s = v.ZoekSchipOp(schipNaam);
             }
+            if(s!= null)
+            {
+                Vloten[s.Vloot.Naam].verwijderSchipUitVloot(s);
+                Vloten[vlootNaam].voegSchipToeAanVloot(s);
+                s.Vloot = Vloten[vlootNaam];
+            }
+
+
         }
-
-
-
-
     }
 }
